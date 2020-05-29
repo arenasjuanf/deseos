@@ -1,0 +1,6 @@
+<ion-list color="dark">
+  <ion-item *ngFor="let lista of pendientes" detail color="dark" (click)="ir(lista)">
+    <ion-label>{{lista.titulo | titlecase}}</ion-label>
+    <ion-note slot="end" color="tertiary">{{lista.items.length}} items</ion-note>
+  </ion-item>
+</ion-list>
