@@ -5,9 +5,14 @@
       <ion-note slot="end" color="tertiary">{{lista.items.length}} items</ion-note>
     </ion-item>
     <ion-item-options side="end">
-    <ion-item-option color="danger" (click)="delete(lista)">
-      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-    </ion-item-option>
+      <ion-item-option color="danger" (click)="delete(lista)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+    <ion-item-options side="start">
+      <ion-item-option color="primary" (click)="edit(lista)">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-item-option>
     </ion-item-options>
   </ion-item-sliding>
   

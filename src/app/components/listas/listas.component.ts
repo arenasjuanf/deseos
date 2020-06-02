@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeseosService } from 'src/app/services/deseos.service';
 import { Lista } from 'src/app/models/lista.model';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonList } from '@ionic/angular';
 
 @Component({
   selector: 'app-listas',
@@ -12,7 +12,7 @@ import { AlertController } from '@ionic/angular';
 export class ListasComponent implements OnInit {
   listas: any;
   @Input() terminada;
-
+  @ViewChild(IonList, {static: false}) lista: IonList;
   constructor(
     private router: Router,
     public deseosService: DeseosService,
@@ -38,7 +38,10 @@ export class ListasComponent implements OnInit {
         {
           text: 'No',
           role: 'cancel',
-          cssClass: 'secondary'
+          cssClass: 'secondary',
+          handler: () => {
+            this.lista.closeSlidingItems();
+          }
         },
         {
           text: 'Si',
@@ -50,11 +53,44 @@ export class ListasComponent implements OnInit {
               this.deseosService.listas.splice(pos, 1);
             }
             this.deseosService.saveStorage();
+            this.lista.closeSlidingItems();
             alert.dismiss();
           }
         }
       ]
     });
     await alert.present();
+  }
+
+  async edit(lista){
+
+    const posicion = this.deseosService.listas.indexOf(lista);
+
+    const alert = await this.alertController.create({
+      header: 'Nombre de la lista',
+      inputs: [
+        {
+          name: 'titulo',
+          type: 'text',
+          placeholder: 'Nuevo Nombre',
+          value: lista.titulo
+        }
+      ],
+      buttons: [{
+        text: 'Cancelar',
+        role: 'cancel'
+      }, {
+        text: 'Ok',
+        handler: (data) => {
+          if(data.titulo && posicion !== -1){
+            this.deseosService.listas[posicion].titulo = data.titulo;
+            this.deseosService.saveStorage();
+          }
+          this.lista.closeSlidingItems();
+        }
+      }]
+    });
+
+    alert.present();
   }
 }
